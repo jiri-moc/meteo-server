@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Weather Station Payload",
+  "description": "Query parameters sent via GET /weatherstation/updateweatherstation.php (Wunderground-compatible protocol). All values arrive as strings. Update interval: ~24 seconds.",
+  "type": "object",
+  "properties": {
+    "ID": {
+      "type": "string",
+      "description": "Station identifier"
+    },
+    "PASSWORD": {
+      "type": "string",
+      "description": "Station password"
+    },
+    "dateutc": {
+      "type": "string",
+      "description": "Observation timestamp in UTC. Always 'now' in realtime mode.",
+      "example": "now"
+    },
+    "baromin": {
+      "type": "string",
+      "description": "Barometric pressure in inches of mercury (inHg)",
+      "example": "29.90"
+    },
+    "tempf": {
+      "type": "string",
+      "description": "Outdoor temperature in degrees Fahrenheit",
+      "example": "71.7"
+    },
+    "dewptf": {
+      "type": "string",
+      "description": "Dew point in degrees Fahrenheit",
+      "example": "53.2"
+    },
+    "humidity": {
+      "type": "string",
+      "description": "Outdoor relative humidity in percent (0–100)",
+      "example": "52"
+    },
+    "windspeedmph": {
+      "type": "string",
+      "description": "Average wind speed in miles per hour",
+      "example": "4.2"
+    },
+    "windgustmph": {
+      "type": "string",
+      "description": "Wind gust speed in miles per hour",
+      "example": "4.6"
+    },
+    "winddir": {
+      "type": "string",
+      "description": "Wind direction in degrees (0–360, meteorological: 0/360 = North, 90 = East)",
+      "example": "312"
+    },
+    "rainin": {
+      "type": "string",
+      "description": "Rainfall in the last 60 minutes, in inches",
+      "example": "0.0"
+    },
+    "dailyrainin": {
+      "type": "string",
+      "description": "Total rainfall since local midnight, in inches",
+      "example": "0.0"
+    },
+    "solarradiation": {
+      "type": "string",
+      "description": "Solar radiation in watts per square meter (W/m²)",
+      "example": "772.55"
+    },
+    "UV": {
+      "type": "string",
+      "description": "UV index",
+      "example": "5.9"
+    },
+    "indoortempf": {
+      "type": "string",
+      "description": "Indoor temperature in degrees Fahrenheit",
+      "example": "74.8"
+    },
+    "indoorhumidity": {
+      "type": "string",
+      "description": "Indoor relative humidity in percent (0–100)",
+      "example": "46"
+    },
+    "softwaretype": {
+      "type": "string",
+      "description": "Station software identifier",
+      "example": "vws versionxx"
+    },
+    "action": {
+      "type": "string",
+      "description": "Request type. Always 'updateraw'.",
+      "const": "updateraw"
+    },
+    "realtime": {
+      "type": "string",
+      "description": "Realtime update flag. Always '1'.",
+      "const": "1"
+    },
+    "rtfreq2.5": {
+      "type": "string",
+      "description": "Malformed realtime frequency parameter. The station intends 'rtfreq=2.5' but sends it as a key with an empty value due to a firmware bug. Always empty string.",
+      "const": ""
+    }
+  },
+  "required": ["ID", "PASSWORD", "dateutc", "baromin", "tempf", "dewptf", "humidity",
+               "windspeedmph", "windgustmph", "winddir", "rainin", "dailyrainin",
+               "solarradiation", "UV", "indoortempf", "indoorhumidity",
+               "softwaretype", "action", "realtime"]
+}
