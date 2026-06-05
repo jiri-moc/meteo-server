@@ -1,0 +1,40 @@
+services:
+  meteo-server:
+    image: "${METEO_SERVER_IMAGE:-meteo-server:master}"
+    container_name: meteo-server
+    restart: always
+    environment:
+      STATION_ID: "${STATION_ID:?STATION_ID is required}"
+      STATION_PASSWORD: "${STATION_PASSWORD:?STATION_PASSWORD is required}"
+      LAT: "${LAT:-}"
+      LON: "${LON:-}"
+      INFLUXDB_URL: "${INFLUXDB_URL:-http://meteo-db:8181}"
+      INFLUXDB_DATABASE: "${INFLUXDB_DATABASE:-meteo}"
+      # The app env var is INFLUXDB_TOKEN; the shared credential lives in INFLUXDB_ADMIN_TOKEN.
+      INFLUXDB_TOKEN: "${INFLUXDB_ADMIN_TOKEN:?INFLUXDB_ADMIN_TOKEN is required}"
+      OPEN_METEO_FORECAST_URL: "${OPEN_METEO_FORECAST_URL:-https://api.open-meteo.com/v1/forecast}"
+      OPEN_METEO_AIR_QUALITY_URL: "${OPEN_METEO_AIR_QUALITY_URL:-https://air-quality-api.open-meteo.com/v1/air-quality}"
+      CHMI_WARNINGS_URL: "${CHMI_WARNINGS_URL:-https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-czechia}"
+    ports:
+      - "${METEO_SERVER_PORT:-9996}:8080"
+
+  meteo-db:
+    image: "${INFLUXDB_IMAGE:-influxdb:3.9.2-core}"
+    container_name: meteo-db
+    restart: always
+    user: "${INFLUXDB_UID:-1000}:${INFLUXDB_GID:-1000}"
+    environment:
+      INFLUXDB3_OBJECT_STORE: file
+      INFLUXDB3_DB_DIR: /var/lib/influxdb3
+      INFLUXDB3_NODE_IDENTIFIER_PREFIX: "${INFLUXDB_NODE_IDENTIFIER_PREFIX:-meteo}"
+      # Token is read from a JSON file written by the Ansible playbook; avoids passing secrets via env.
+      INFLUXDB3_ADMIN_TOKEN_FILE: /var/lib/influxdb3/admin-token
+      INFLUXDB3_PLUGIN_DIR: /var/lib/influxdb3/plugins
+      # Prevents InfluxDB from attempting to install Python packages at startup.
+      INFLUXDB3_PACKAGE_MANAGER: disabled
+      # Pre-configured venv path expected by InfluxDB Python plugins.
+      VIRTUAL_ENV: /var/lib/influxdb3/plugins/.venv
+    ports:
+      - "${INFLUXDB_PORT:-8181}:8181"
+    volumes:
+      - "${INFLUXDB_DATA_DIR:-./data}:/var/lib/influxdb3"
