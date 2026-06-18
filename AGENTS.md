@@ -2,7 +2,7 @@
 
 ## Project structure and module organization
 
-This repository contains a small FastAPI weather-station ingestion service. The application code is currently centralized in `main.py`, including configuration, request validation, derived metric calculation, background fetchers, and InfluxDB writes. Tests live in `tests/`: `test_main.py` covers unit and endpoint behavior, while `test_e2e_influx.py` exercises InfluxDB integration. Deployment assets are kept beside the app: `Dockerfile`, `.gitlab-ci.yml`, `playbook.yml`, `inventory/homelab.yml`, the Compose file in `templates/compose.yaml`, and its env templates in `templates/.env.j2` and `templates/.env.example`. JSON Schemas and generated metric documentation belong in `docs/`.
+This repository contains a small FastAPI weather-station ingestion service. The application code is currently centralized in `main.py`, including configuration, request validation, derived metric calculation, background fetchers, and InfluxDB writes. Tests live in `tests/`: `test_main.py` covers unit and endpoint behavior, while `test_e2e_influx.py` exercises InfluxDB integration. Deployment assets are kept beside the app: `Dockerfile`, `.gitlab-ci.yml`, `deploy/playbook.yml`, `deploy/inventory/homelab.yml`, the Compose file in `templates/compose.yaml`, and its env templates in `templates/.env.j2` and `templates/.env.example`. JSON Schemas and generated metric documentation belong in `docs/`.
 
 ## Build, test, and development commands
 

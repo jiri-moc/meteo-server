@@ -2,6 +2,19 @@
 
 A minimal FastAPI server that receives data from a personal weather station. It implements a Wunderground-compatible endpoint: the station sends readings as a GET request, the server authenticates credentials, computes derived values, and writes them to InfluxDB 3.
 
+## Architecture
+
+![Architecture diagram](docs/architecture.drawio.png)
+
+The station sends a reading every ~24 seconds. meteo-server authenticates it, derives additional values (unit conversions, feels-like temperature, wet-bulb, cloud base, sensor anomaly flags), and writes everything to InfluxDB. Grafana reads from InfluxDB for dashboards.
+
+The two dashed sources are optional enrichments pulled in the background:
+
+- **Open-Meteo API** (every 5 min) — current forecast temperature and wind, used to compare how well the forecast matched the station reading; also provides AQI, PM2.5, and PM10. Enabling it also unlocks the clear-sky solar radiation model.
+- **ČHMÚ / Meteoalarm** (every 15 min) — active weather warning levels for Czechia, fed into the composite `meteo_weather_score`.
+
+Both are disabled when `LAT`/`LON` are not set. The server works fully offline with no outbound connections; the external fields simply won't appear in InfluxDB.
+
 ## Running locally
 
 ```bash
@@ -211,4 +224,8 @@ docker compose -f templates/compose.yaml --env-file .env config
 Automated deployment typically does:
 
 1. `build-image` builds and pushes the Docker image to the chosen registry.
-2. `deploy` runs only on `master`. It runs the Ansible playbook, uploads `.env` and `compose.yaml` to the homelab server, and recreates the container. The host comes from the CI/CD variable `HOMELAB_HOST`; the default published port is `9996`, mapped to HTTPS inside the container on port `8080`.
+2. `deploy` runs only on `master`. It runs the Ansible playbook from `deploy/playbook.yml` against `deploy/inventory/homelab.yml`, uploads `.env` and `compose.yaml` to the homelab server, and recreates the container. The host comes from the CI/CD variable `HOMELAB_HOST`; the default published port is `9996`, mapped to HTTPS inside the container on port `8080`.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).

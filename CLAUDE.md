@@ -52,7 +52,7 @@ The Docker image generates a self-signed TLS certificate at `/app/key.pem` and `
 CI/CD runs on GitLab (`runner-homelab` tag). Deploy is restricted to `master`.
 
 1. `build-image` builds and pushes the Docker image to the configured registry.
-2. `deploy` runs `playbook.yml` via Ansible against `inventory/homelab.yml`. The host comes from the `HOMELAB_HOST` CI/CD variable, and the SSH user is `ubuntu`.
+2. `deploy` runs `deploy/playbook.yml` via Ansible against `deploy/inventory/homelab.yml`. The host comes from the `HOMELAB_HOST` CI/CD variable, and the SSH user is `ubuntu`.
 
 The Ansible playbook copies `templates/compose.yaml` and renders `templates/.env.j2` to `.env` on the target host at `/home/ubuntu/docker/meteo-server/`. It then pulls and recreates the container. Docker Compose reads that `.env` file for the app image, published ports, station credentials, external URLs, InfluxDB image/version, database name, data directory, UID/GID, node prefix, and InfluxDB admin token.
 

@@ -144,6 +144,9 @@ def test_station_update_writes_station_and_external_values_to_influxdb(influxdb,
     monkeypatch.setattr(main, "_forecast_t_c", 20.0)
     monkeypatch.setattr(main, "_forecast_wind_kmh", 12.5)
     monkeypatch.setattr(main, "_last_station_snapshot", None)
+    # Fix clearsky to a daytime value so meteo_cloud_cover_index is always written
+    # regardless of when CI runs; without this the column is absent at night → 500 from InfluxDB.
+    monkeypatch.setattr(main, "compute_clearsky_ghi", lambda lat, lon, dt: 600.0)
     monkeypatch.setattr(
         main,
         "_external_fields",
