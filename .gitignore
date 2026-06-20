@@ -6,8 +6,7 @@ venv/
 
 .env
 .env.*
-!templates/.env.example
-!templates/.env.j2
+!.env.example
 
 .vscode/
 .idea/

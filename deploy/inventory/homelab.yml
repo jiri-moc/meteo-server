@@ -1,7 +1,0 @@
-all:
-  vars: {}
-  hosts:
-    homelab:
-      ansible_user: ubuntu
-      ansible_host: "{{ homelab_host }}"
-      docker_dir: /home/ubuntu/docker/meteo-server

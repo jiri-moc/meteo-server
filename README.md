@@ -63,9 +63,14 @@ docker run -e STATION_ID=myid -e STATION_PASSWORD=mypass -e INFLUXDB_TOKEN=mytok
 
 The Docker image generates a self-signed TLS certificate at `/app/key.pem` and `/app/cert.pem` at build time, so the container serves HTTPS on port `8080`. To run plain HTTP in the container, set `SSL_KEY`/`SSL_CERT` to non-existent paths.
 
-In production, InfluxDB is defined in `templates/compose.yaml` as the `meteo-db` service. Compose reads variables from the `.env` file next to `compose.yaml`; for manual deployments use `templates/.env.example` as the starting point.
+To run both meteo-server and InfluxDB together, use the provided `docker-compose.yaml`. Copy `.env.example` to `.env`, fill in your values, then start everything with `docker compose up -d`. After first startup, create the InfluxDB database:
 
-The playbook writes `.env` from `templates/.env.j2` and writes the offline admin token JSON from `INFLUXDB_ADMIN_TOKEN`. InfluxDB reads that token through `INFLUXDB3_ADMIN_TOKEN_FILE`. The app writes line protocol to `/api/v3/write_lp` in the database set by `INFLUXDB_DATABASE`.
+```bash
+curl -sf -X POST http://localhost:8181/api/v3/configure/database \
+  -H "Authorization: Bearer $INFLUXDB_ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"db": "meteo"}'
+```
 
 ## Development and testing
 
@@ -190,41 +195,38 @@ The complete JSON Schema for both measurements is in [docs/generated-metrics.sch
 
 ## Deployment
 
-Deployment can run from GitLab CI/CD or GitHub Actions. The Compose file contains no Ansible lookups or hardcoded registry host; values come from the `.env` file that Docker Compose reads automatically from the directory containing `compose.yaml`.
+`docker-compose.yaml` at the repository root defines both services. Docker Compose reads variables from `.env` in the same directory; use `.env.example` as the starting point.
 
 | Variable | Description |
 | --- | --- |
-| `METEO_SERVER_IMAGE` | Full image name including tag, e.g. `registry.example.com/team/meteo-server:master` or `ghcr.io/owner/meteo-server:master` |
+| `METEO_SERVER_IMAGE` | Full image name including tag, e.g. `ghcr.io/owner/meteo-server:main`; default `meteo-server:latest` |
 | `METEO_SERVER_PORT` | Host port published to container port `8080`; default `9996` |
 | `STATION_ID` / `STATION_PASSWORD` | Station credentials passed to the container |
 | `LAT` / `LON` | Station coordinates for external fetchers and the clear-sky model |
-| `INFLUXDB_ADMIN_TOKEN` | Token used for both the InfluxDB admin file and app writes |
+| `INFLUXDB_ADMIN_TOKEN` | Token shared between InfluxDB and the app; must start with `apiv3_` |
 | `INFLUXDB_IMAGE` | InfluxDB image and version; default `influxdb:3.9.2-core` |
 | `INFLUXDB_URL` | Internal URL from the app to InfluxDB; default `http://meteo-db:8181` |
-| `INFLUXDB_DATABASE` | Database created by the playbook and used by the app; default `meteo` |
+| `INFLUXDB_DATABASE` | Database used by the app; default `meteo` |
 | `INFLUXDB_PORT` | Host port published to container port `8181`; default `8181` |
-| `INFLUXDB_DATA_DIR` | Host path for InfluxDB data; default `./data` next to `compose.yaml` |
+| `INFLUXDB_DATA_DIR` | Host path for InfluxDB data; default `./data` |
 | `INFLUXDB_UID` / `INFLUXDB_GID` | UID/GID the InfluxDB container runs as; default `1000`/`1000` |
 | `INFLUXDB_NODE_IDENTIFIER_PREFIX` | InfluxDB node identifier prefix; default `meteo` |
 | `OPEN_METEO_FORECAST_URL`, `OPEN_METEO_AIR_QUALITY_URL`, `CHMI_WARNINGS_URL` | Optional overrides for external source endpoints |
 
-Ansible generates `.env` from CI variables via `templates/.env.j2`. An explicit `METEO_SERVER_IMAGE` takes precedence.
-
-If `METEO_SERVER_IMAGE` is not set, the template builds the image name from `METEO_SERVER_IMAGE_REPOSITORY` and `METEO_SERVER_IMAGE_TAG`. It can also use GitLab's `CI_REGISTRY_IMAGE` and `CI_COMMIT_REF_SLUG`, or GitHub's `GITHUB_REPOSITORY` and `GITHUB_REF_NAME` with `ghcr.io` as the default registry. Without CI variables it falls back to `meteo-server:master`.
-
-Only internal InfluxDB paths like `/var/lib/influxdb3` and the token file path are hardcoded in Compose, as they belong to the container's internal contract. All deployment-specific values live in `.env`.
-
-For manual deployment, copy the example to the target compose directory as `.env` and fill in real values:
+Quick start:
 
 ```bash
-cp templates/.env.example .env
-docker compose -f templates/compose.yaml --env-file .env config
+cp .env.example .env
+# edit .env — set STATION_ID, STATION_PASSWORD, INFLUXDB_ADMIN_TOKEN at minimum
+docker compose up -d
+# one-time: create the InfluxDB database
+curl -sf -X POST http://localhost:8181/api/v3/configure/database \
+  -H "Authorization: Bearer $INFLUXDB_ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"db": "meteo"}'
 ```
 
-Automated deployment typically does:
-
-1. `build-image` builds and pushes the Docker image to the chosen registry.
-2. `deploy` runs only on `master`. It runs the Ansible playbook from `deploy/playbook.yml` against `deploy/inventory/homelab.yml`, uploads `.env` and `compose.yaml` to the homelab server, and recreates the container. The host comes from the CI/CD variable `HOMELAB_HOST`; the default published port is `9996`, mapped to HTTPS inside the container on port `8080`.
+For CI/CD, set `METEO_SERVER_IMAGE` to the full image name pushed by the build step and pass the other variables as secrets. The `depends_on` health check in the Compose file ensures meteo-server waits until InfluxDB is ready before starting.
 
 ## License
 

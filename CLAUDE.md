@@ -49,22 +49,18 @@ The Docker image generates a self-signed TLS certificate at `/app/key.pem` and `
 
 ## Deployment
 
-CI/CD runs on GitLab (`runner-homelab` tag). Deploy is restricted to `master`.
+`docker-compose.yaml` in the repository root defines both services. Docker Compose reads variables from `.env` in the same directory; use `.env.example` as the starting point.
 
-1. `build-image` builds and pushes the Docker image to the configured registry.
-2. `deploy` runs `deploy/playbook.yml` via Ansible against `deploy/inventory/homelab.yml`. The host comes from the `HOMELAB_HOST` CI/CD variable, and the SSH user is `ubuntu`.
+Both services start with `docker compose up -d`. After first startup, create the InfluxDB database:
 
-The Ansible playbook copies `templates/compose.yaml` and renders `templates/.env.j2` to `.env` on the target host at `/home/ubuntu/docker/meteo-server/`. It then pulls and recreates the container. Docker Compose reads that `.env` file for the app image, published ports, station credentials, external URLs, InfluxDB image/version, database name, data directory, UID/GID, node prefix, and InfluxDB admin token.
+```bash
+curl -sf -X POST http://localhost:8181/api/v3/configure/database \
+  -H "Authorization: Bearer $INFLUXDB_ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"db": "meteo"}'
+```
 
-By default, the app maps host port `9996` to container port `8080`. InfluxDB maps host port `8181` to container port `8181`.
-
-To trigger a deploy, push to `master`; CI handles the rest.
-
-`templates/compose.yaml` contains only Docker Compose variable interpolation, not Ansible lookups. Set `METEO_SERVER_IMAGE` in `.env` for a full override.
-
-During Ansible deploy, `templates/.env.j2` can derive the image from `METEO_SERVER_IMAGE_REPOSITORY` and `METEO_SERVER_IMAGE_TAG`. GitLab defaults come from `CI_REGISTRY_IMAGE` and `CI_COMMIT_REF_SLUG`; GitHub defaults come from `ghcr.io/$GITHUB_REPOSITORY` and a Docker-tag-safe `GITHUB_REF_NAME`.
-
-InfluxDB deploy settings are also in `.env`: `INFLUXDB_IMAGE`, `INFLUXDB_URL`, `INFLUXDB_DATABASE`, `INFLUXDB_PORT`, `INFLUXDB_DATA_DIR`, `INFLUXDB_UID`, `INFLUXDB_GID`, and `INFLUXDB_NODE_IDENTIFIER_PREFIX`. Keep stable container-internal paths in Compose. When running locally without CI, use `templates/.env.example` as the starting point.
+For CI/CD, set `METEO_SERVER_IMAGE` to the full image name pushed by the build step and pass other variables as secrets. The app maps host port `9996` to container port `8080`; InfluxDB maps host port `8181` to container port `8181`.
 
 ## Architecture
 
