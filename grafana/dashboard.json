@@ -55,7 +55,7 @@
       }
     ]
   },
-  "description": "Meteostanice rodinný dům — teplota, vlhkost, vítr, srážky, tlak, sluneční záření, kvalita vzduchu, varování ČHMÚ",
+  "description": "Weather station — temperature, humidity, wind, precipitation, pressure, solar radiation, air quality, ČHMÚ warnings",
   "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -67,15 +67,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
       "id": 1,
-      "title": "Aktuální stav",
+      "title": "Current Status",
       "type": "row"
     },
 
     {
       "type": "stat",
       "id": 2,
-      "title": "Venkovní teplota",
-      "description": "Aktuální teplota vzduchu naměřená stanicí",
+      "title": "Outdoor Temperature",
+      "description": "Current air temperature measured by the station",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 0, "y": 1 },
       "options": {
@@ -107,7 +107,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_temperature_celsius AS \"Teplota\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_temperature_celsius AS \"Temperature\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -118,8 +118,8 @@
     {
       "type": "stat",
       "id": 3,
-      "title": "Pocitová teplota",
-      "description": "Tepelný index (>27 °C, RH>40 %) nebo chlad větru (≤10 °C, vítr>4,8 km/h), jinak skutečná teplota",
+      "title": "Feels Like Temperature",
+      "description": "Heat index (>27 °C, RH>40 %) or wind chill (≤10 °C, wind>4.8 km/h), otherwise actual temperature",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 3, "y": 1 },
       "options": {
@@ -151,7 +151,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_feels_like_celsius AS \"Pocitová\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_feels_like_celsius AS \"Feels Like\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -162,8 +162,8 @@
     {
       "type": "stat",
       "id": 4,
-      "title": "Teplota uvnitř",
-      "description": "Teplota naměřená senzorem uvnitř stanice",
+      "title": "Indoor Temperature",
+      "description": "Temperature measured by the indoor sensor",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 6, "y": 1 },
       "options": {
@@ -194,7 +194,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_indoor_temperature_celsius AS \"Uvnitř\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_indoor_temperature_celsius AS \"Indoors\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -205,8 +205,8 @@
     {
       "type": "stat",
       "id": 5,
-      "title": "Vlhkost vzduchu",
-      "description": "Relativní vlhkost venkovního vzduchu",
+      "title": "Air Humidity",
+      "description": "Relative humidity of outdoor air",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 9, "y": 1 },
       "options": {
@@ -238,7 +238,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_humidity_percent AS \"Vlhkost\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_humidity_percent AS \"Humidity\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -249,8 +249,8 @@
     {
       "type": "stat",
       "id": 6,
-      "title": "Tlak vzduchu",
-      "description": "Atmosférický tlak. Klesající tlak předznamenává zhoršení počasí, rostoucí tlak zlepšení.",
+      "title": "Air Pressure",
+      "description": "Atmospheric pressure. Falling pressure signals worsening weather, rising pressure signals improvement.",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 12, "y": 1 },
       "options": {
@@ -282,7 +282,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_pressure_hpa AS \"Tlak\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_pressure_hpa AS \"Pressure\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -293,8 +293,8 @@
     {
       "type": "stat",
       "id": 7,
-      "title": "Vítr / Poryv",
-      "description": "Aktuální rychlost větru a maximální poryv",
+      "title": "Wind / Gust",
+      "description": "Current wind speed and maximum gust",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 15, "y": 1 },
       "options": {
@@ -325,14 +325,14 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_wind_speed_ms AS \"Rychlost\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_wind_speed_ms AS \"Speed\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
         },
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_wind_gust_ms AS \"Poryv\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_wind_gust_ms AS \"Gust\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "B"
@@ -343,8 +343,8 @@
     {
       "type": "stat",
       "id": 8,
-      "title": "Srážky dnes",
-      "description": "Celkové srážky od půlnoci (denní akumulace stanice)",
+      "title": "Precipitation Today",
+      "description": "Total precipitation since midnight (daily station accumulation)",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 18, "y": 1 },
       "options": {
@@ -375,7 +375,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_rain_daily_mm AS \"Srážky dnes\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_rain_daily_mm AS \"Rain Today\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -386,8 +386,8 @@
     {
       "type": "stat",
       "id": 9,
-      "title": "UV index",
-      "description": "Ultrafialový index. 0–2 nízký, 3–5 střední, 6–7 vysoký, 8–10 velmi vysoký, 11+ extrémní",
+      "title": "UV Index",
+      "description": "Ultraviolet index. 0–2 low, 3–5 moderate, 6–7 high, 8–10 very high, 11+ extreme",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 4, "w": 3, "x": 21, "y": 1 },
       "options": {
@@ -419,7 +419,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_uv_index AS \"UV index\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_uv_index AS \"UV Index\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -431,15 +431,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
       "id": 10,
-      "title": "Teplota",
+      "title": "Temperature",
       "type": "row"
     },
 
     {
       "type": "timeseries",
       "id": 11,
-      "title": "Teploty",
-      "description": "Venkovní teplota, pocitová teplota, vnitřní teplota, rosný bod, mokrý teploměr a předpověď Open-Meteo",
+      "title": "Temperatures",
+      "description": "Outdoor temperature, feels-like temperature, indoor temperature, dew point, wet-bulb temperature and Open-Meteo forecast",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 9, "w": 24, "x": 0, "y": 6 },
       "options": {
@@ -467,20 +467,20 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Pocitová" },
+            "matcher": { "id": "byName", "options": "Feels Like" },
             "properties": [
               { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [6, 4] } },
               { "id": "custom.fillOpacity", "value": 0 }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Rosný bod" },
+            "matcher": { "id": "byName", "options": "Dew Point" },
             "properties": [
               { "id": "custom.fillOpacity", "value": 0 }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Předpověď" },
+            "matcher": { "id": "byName", "options": "Forecast" },
             "properties": [
               { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [8, 4] } },
               { "id": "custom.fillOpacity", "value": 0 },
@@ -488,7 +488,7 @@
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Mokrý teploměr" },
+            "matcher": { "id": "byName", "options": "Wet Bulb" },
             "properties": [
               { "id": "custom.fillOpacity", "value": 0 },
               { "id": "custom.lineWidth", "value": 1 }
@@ -499,7 +499,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_temperature_celsius) AS \"Venkovní\",\n  AVG(meteo_feels_like_celsius) AS \"Pocitová\",\n  AVG(meteo_indoor_temperature_celsius) AS \"Vnitřní\",\n  AVG(meteo_dew_point_celsius) AS \"Rosný bod\",\n  AVG(meteo_wet_bulb_temperature_celsius) AS \"Mokrý teploměr\",\n  AVG(meteo_forecast_temperature_celsius) AS \"Předpověď\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_temperature_celsius) AS \"Outdoor\",\n  AVG(meteo_feels_like_celsius) AS \"Feels Like\",\n  AVG(meteo_indoor_temperature_celsius) AS \"Indoor\",\n  AVG(meteo_dew_point_celsius) AS \"Dew Point\",\n  AVG(meteo_wet_bulb_temperature_celsius) AS \"Wet Bulb\",\n  AVG(meteo_forecast_temperature_celsius) AS \"Forecast\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -511,15 +511,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 15 },
       "id": 12,
-      "title": "Vítr",
+      "title": "Wind",
       "type": "row"
     },
 
     {
       "type": "timeseries",
       "id": 13,
-      "title": "Rychlost větru a poryvy",
-      "description": "Průměrná rychlost větru a maximální poryvy v m/s",
+      "title": "Wind Speed and Gusts",
+      "description": "Average wind speed and maximum gusts in m/s",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 18, "x": 0, "y": 16 },
       "options": {
@@ -548,14 +548,14 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Poryv" },
+            "matcher": { "id": "byName", "options": "Gust" },
             "properties": [
               { "id": "custom.fillOpacity", "value": 20 },
               { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Rychlost" },
+            "matcher": { "id": "byName", "options": "Speed" },
             "properties": [
               { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
             ]
@@ -565,7 +565,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_wind_speed_ms) AS \"Rychlost\",\n  MAX(meteo_wind_gust_ms) AS \"Poryv\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_wind_speed_ms) AS \"Speed\",\n  MAX(meteo_wind_gust_ms) AS \"Gust\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -576,8 +576,8 @@
     {
       "type": "stat",
       "id": 14,
-      "title": "Směr větru",
-      "description": "Aktuální směr větru ve stupních a světová strana",
+      "title": "Wind Direction",
+      "description": "Current wind direction in degrees and cardinal direction",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 6, "x": 18, "y": 16 },
       "options": {
@@ -594,15 +594,15 @@
           "decimals": 0,
           "unit": "degree",
           "mappings": [
-            { "type": "range", "options": { "from": 0, "to": 22.5, "result": { "text": "S ↑", "index": 0 } } },
-            { "type": "range", "options": { "from": 22.5, "to": 67.5, "result": { "text": "SV ↗", "index": 1 } } },
-            { "type": "range", "options": { "from": 67.5, "to": 112.5, "result": { "text": "V →", "index": 2 } } },
-            { "type": "range", "options": { "from": 112.5, "to": 157.5, "result": { "text": "JV ↘", "index": 3 } } },
-            { "type": "range", "options": { "from": 157.5, "to": 202.5, "result": { "text": "J ↓", "index": 4 } } },
-            { "type": "range", "options": { "from": 202.5, "to": 247.5, "result": { "text": "JZ ↙", "index": 5 } } },
-            { "type": "range", "options": { "from": 247.5, "to": 292.5, "result": { "text": "Z ←", "index": 6 } } },
-            { "type": "range", "options": { "from": 292.5, "to": 337.5, "result": { "text": "SZ ↖", "index": 7 } } },
-            { "type": "range", "options": { "from": 337.5, "to": 360, "result": { "text": "S ↑", "index": 8 } } }
+            { "type": "range", "options": { "from": 0, "to": 22.5, "result": { "text": "N ↑", "index": 0 } } },
+            { "type": "range", "options": { "from": 22.5, "to": 67.5, "result": { "text": "NE ↗", "index": 1 } } },
+            { "type": "range", "options": { "from": 67.5, "to": 112.5, "result": { "text": "E →", "index": 2 } } },
+            { "type": "range", "options": { "from": 112.5, "to": 157.5, "result": { "text": "SE ↘", "index": 3 } } },
+            { "type": "range", "options": { "from": 157.5, "to": 202.5, "result": { "text": "S ↓", "index": 4 } } },
+            { "type": "range", "options": { "from": 202.5, "to": 247.5, "result": { "text": "SW ↙", "index": 5 } } },
+            { "type": "range", "options": { "from": 247.5, "to": 292.5, "result": { "text": "W ←", "index": 6 } } },
+            { "type": "range", "options": { "from": 292.5, "to": 337.5, "result": { "text": "NW ↖", "index": 7 } } },
+            { "type": "range", "options": { "from": 337.5, "to": 360, "result": { "text": "N ↑", "index": 8 } } }
           ]
         },
         "overrides": []
@@ -610,7 +610,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_wind_direction_degrees AS \"Směr\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_wind_direction_degrees AS \"Direction\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -622,15 +622,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 24 },
       "id": 15,
-      "title": "Srážky a vlhkost",
+      "title": "Precipitation and Humidity",
       "type": "row"
     },
 
     {
       "type": "timeseries",
       "id": 16,
-      "title": "Srážky",
-      "description": "Denní akumulace srážek a intenzita srážek v daném intervalu",
+      "title": "Precipitation",
+      "description": "Daily precipitation accumulation and precipitation intensity in the given interval",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 25 },
       "options": {
@@ -659,7 +659,7 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Intenzita" },
+            "matcher": { "id": "byName", "options": "Intensity" },
             "properties": [
               {
                 "id": "custom.drawStyle",
@@ -675,7 +675,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  MAX(meteo_rain_daily_mm) AS \"Dnes celkem\",\n  SUM(meteo_rain_mm) AS \"Intenzita\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  MAX(meteo_rain_daily_mm) AS \"Total Today\",\n  SUM(meteo_rain_mm) AS \"Intensity\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -686,8 +686,8 @@
     {
       "type": "timeseries",
       "id": 17,
-      "title": "Vlhkost vzduchu",
-      "description": "Relativní vlhkost venku a uvnitř, absolutní vlhkost vzduchu",
+      "title": "Air Humidity",
+      "description": "Relative humidity outdoors and indoors, absolute air humidity",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 25 },
       "options": {
@@ -717,7 +717,7 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Abs. vlhkost" },
+            "matcher": { "id": "byName", "options": "Abs. Humidity" },
             "properties": [
               { "id": "unit", "value": "g/m³" },
               { "id": "custom.axisPlacement", "value": "right" },
@@ -731,7 +731,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_humidity_percent) AS \"Venkovní RH\",\n  AVG(meteo_indoor_humidity_percent) AS \"Vnitřní RH\",\n  AVG(meteo_absolute_humidity_gm3) AS \"Abs. vlhkost\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_humidity_percent) AS \"Outdoor RH\",\n  AVG(meteo_indoor_humidity_percent) AS \"Indoor RH\",\n  AVG(meteo_absolute_humidity_gm3) AS \"Abs. Humidity\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -743,15 +743,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 33 },
       "id": 18,
-      "title": "Tlak vzduchu",
+      "title": "Air Pressure",
       "type": "row"
     },
 
     {
       "type": "timeseries",
       "id": 19,
-      "title": "Atmosférický tlak",
-      "description": "Vývoj atmosférického tlaku. Rychlý pokles (>3 hPa/3h) signalizuje blížící se frontální systém.",
+      "title": "Atmospheric Pressure",
+      "description": "Atmospheric pressure trend. A rapid drop (>3 hPa/3h) signals an approaching frontal system.",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 34 },
       "options": {
@@ -790,7 +790,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_pressure_hpa) AS \"Tlak\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_pressure_hpa) AS \"Pressure\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -802,15 +802,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 42 },
       "id": 20,
-      "title": "Sluneční záření",
+      "title": "Solar Radiation",
       "type": "row"
     },
 
     {
       "type": "timeseries",
       "id": 21,
-      "title": "Sluneční záření — měřené vs. jasná obloha",
-      "description": "Změřené sluneční záření (W/m²) oproti teoretickému maximu pro jasnou oblohu (model Cooper/Spencer/Kasten-Young/Hottel). Mezera mezi křivkami ukazuje oblačnost.",
+      "title": "Solar Radiation — measured vs. clear sky",
+      "description": "Measured solar radiation (W/m²) vs. theoretical maximum for clear sky (Cooper/Spencer/Kasten-Young/Hottel model). The gap between the curves indicates cloud cover.",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 16, "x": 0, "y": 43 },
       "options": {
@@ -839,7 +839,7 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Jasná obloha" },
+            "matcher": { "id": "byName", "options": "Clear Sky" },
             "properties": [
               { "id": "custom.lineStyle", "value": { "fill": "dash", "dash": [6, 4] } },
               { "id": "custom.fillOpacity", "value": 0 },
@@ -847,7 +847,7 @@
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Měřené" },
+            "matcher": { "id": "byName", "options": "Measured" },
             "properties": [
               { "id": "color", "value": { "fixedColor": "#FADE2A", "mode": "fixed" } }
             ]
@@ -857,7 +857,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_solar_radiation_wm2) AS \"Měřené\",\n  AVG(meteo_solar_radiation_clearsky_wm2) AS \"Jasná obloha\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_solar_radiation_wm2) AS \"Measured\",\n  AVG(meteo_solar_radiation_clearsky_wm2) AS \"Clear Sky\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -868,8 +868,8 @@
     {
       "type": "timeseries",
       "id": 22,
-      "title": "UV index a index oblačnosti",
-      "description": "UV index a index oslunění (0 = zcela zataženo, 1 = jasno; poměr změřeného záření vůči jasné obloze)",
+      "title": "UV Index and Cloud Cover Index",
+      "description": "UV index and sunshine index (0 = completely overcast, 1 = clear; ratio of measured radiation to clear sky)",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 8, "x": 16, "y": 43 },
       "options": {
@@ -897,7 +897,7 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Oslunění" },
+            "matcher": { "id": "byName", "options": "Sunshine" },
             "properties": [
               { "id": "unit", "value": "percentunit" },
               { "id": "max", "value": 1 },
@@ -906,7 +906,7 @@
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "UV index" },
+            "matcher": { "id": "byName", "options": "UV Index" },
             "properties": [
               { "id": "color", "value": { "fixedColor": "#FADE2A", "mode": "fixed" } }
             ]
@@ -916,7 +916,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_uv_index) AS \"UV index\",\n  AVG(meteo_cloud_cover_index) AS \"Oslunění\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_uv_index) AS \"UV Index\",\n  AVG(meteo_cloud_cover_index) AS \"Sunshine\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -928,15 +928,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 51 },
       "id": 23,
-      "title": "Kvalita vzduchu",
+      "title": "Air Quality",
       "type": "row"
     },
 
     {
       "type": "stat",
       "id": 24,
-      "title": "Evropský AQI",
-      "description": "Evropský index kvality vzduchu (Open-Meteo). 0–20 výborný, 20–40 dobrý, 40–60 střední, 60–80 špatný, 80–100 velmi špatný, >100 extrémně špatný",
+      "title": "European AQI",
+      "description": "European air quality index (Open-Meteo). 0–20 excellent, 20–40 good, 40–60 moderate, 60–80 poor, 80–100 very poor, >100 extremely poor",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 4, "x": 0, "y": 52 },
       "options": {
@@ -980,8 +980,8 @@
     {
       "type": "timeseries",
       "id": 25,
-      "title": "Prachové částice PM2.5 a PM10",
-      "description": "Koncentrace prachových částic z Open-Meteo (μg/m³). WHO doporučuje: PM2.5 < 15 μg/m³ (24h průměr), PM10 < 45 μg/m³.",
+      "title": "Particulate Matter PM2.5 and PM10",
+      "description": "Particulate matter concentrations from Open-Meteo (μg/m³). WHO guidelines: PM2.5 < 15 μg/m³ (24h average), PM10 < 45 μg/m³.",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 12, "x": 4, "y": 52 },
       "options": {
@@ -1041,8 +1041,8 @@
     {
       "type": "bargauge",
       "id": 26,
-      "title": "Varování ČHMÚ — aktuální úrovně",
-      "description": "Aktuální výstražné úrovně Meteoalarm pro ČR. 0 = bez varování, 1 = žlutá, 2 = oranžová, 3 = červená",
+      "title": "ČHMÚ Warnings — current levels",
+      "description": "Current Meteoalarm warning levels for Czech Republic. 0 = no warning, 1 = yellow, 2 = orange, 3 = red",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 8, "x": 16, "y": 52 },
       "options": {
@@ -1053,7 +1053,7 @@
         "namePlacement": "auto",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
-          "fields": "/^Úroveň$/",
+          "fields": "/^Level$/",
           "values": true
         },
         "showUnfilled": true,
@@ -1081,7 +1081,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT event, meteo_chmi_warning_level AS \"Úroveň\"\nFROM meteo_chmi_warning\nWHERE $__timeFilter(time)\n  AND time = (\n    SELECT MAX(time) FROM meteo_chmi_warning WHERE $__timeFilter(time)\n  )\nORDER BY event",
+          "rawSql": "SELECT event, meteo_chmi_warning_level AS \"Level\"\nFROM meteo_chmi_warning\nWHERE $__timeFilter(time)\n  AND time = (\n    SELECT MAX(time) FROM meteo_chmi_warning WHERE $__timeFilter(time)\n  )\nORDER BY event",
           "rawQuery": true,
           "format": "table",
           "refId": "A"
@@ -1093,15 +1093,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 60 },
       "id": 27,
-      "title": "Odvozené meteorologické veličiny",
+      "title": "Derived Meteorological Variables",
       "type": "row"
     },
 
     {
       "type": "timeseries",
       "id": 28,
-      "title": "Absolutní vlhkost a deficit sytosti par (VPD)",
-      "description": "Absolutní vlhkost (g/m³) = skutečné množství vodní páry v 1 m³ vzduchu, nezávisle na teplotě. VPD (hPa) = rozdíl mezi nasyceným a skutečným tlakem vodní páry — důležité pro transpiraci rostlin a evaporaci.",
+      "title": "Absolute Humidity and Vapor Pressure Deficit (VPD)",
+      "description": "Absolute humidity (g/m³) = actual amount of water vapour in 1 m³ of air, independent of temperature. VPD (hPa) = difference between saturation and actual vapour pressure — important for plant transpiration and evaporation.",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 61 },
       "options": {
@@ -1141,7 +1141,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_absolute_humidity_gm3) AS \"Abs. vlhkost\",\n  AVG(meteo_vapor_pressure_deficit_hpa) AS \"VPD\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_absolute_humidity_gm3) AS \"Abs. Humidity\",\n  AVG(meteo_vapor_pressure_deficit_hpa) AS \"VPD\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -1152,8 +1152,8 @@
     {
       "type": "timeseries",
       "id": 29,
-      "title": "Základna oblačnosti a odchylka teploty od předpovědi",
-      "description": "Základna oblačnosti (m) = výška kondenzační hladiny (LCL), pod níž se tvoří nízká oblačnost a mlha. Odchylka teploty ukazuje mikroklimatické odlišnosti lokality oproti regionální předpovědi Open-Meteo.",
+      "title": "Cloud Base and Temperature Deviation from Forecast",
+      "description": "Cloud base (m) = height of the condensation level (LCL), below which low clouds and fog form. Temperature deviation shows microclimatic differences of the location compared to the regional Open-Meteo forecast.",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 61 },
       "options": {
@@ -1181,7 +1181,7 @@
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Odchylka od předpovědi" },
+            "matcher": { "id": "byName", "options": "Forecast Deviation" },
             "properties": [
               { "id": "unit", "value": "celsius" },
               { "id": "custom.axisPlacement", "value": "right" },
@@ -1205,7 +1205,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_cloud_base_meters) AS \"Základna oblačnosti\",\n  AVG(meteo_temperature_deviation_celsius) AS \"Odchylka od předpovědi\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__dateBin(time) AS time,\n  AVG(meteo_cloud_base_meters) AS \"Cloud Base\",\n  AVG(meteo_temperature_deviation_celsius) AS \"Forecast Deviation\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nGROUP BY 1\nORDER BY 1",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -1217,15 +1217,15 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 69 },
       "id": 32,
-      "title": "Skóre a diagnostika",
+      "title": "Scores and Diagnostics",
       "type": "row"
     },
 
     {
       "type": "stat",
       "id": 33,
-      "title": "Lokální skóre počasí",
-      "description": "Souhrnné skóre 0–100 podle komfortu venku, větru, deště, UV, AQI a výstrah",
+      "title": "Local Weather Score",
+      "description": "Composite score 0–100 based on outdoor comfort, wind, rain, UV, AQI and warnings",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 5, "w": 6, "x": 0, "y": 70 },
       "options": {
@@ -1258,7 +1258,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_weather_score AS \"Skóre\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_weather_score AS \"Score\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -1269,8 +1269,8 @@
     {
       "type": "stat",
       "id": 34,
-      "title": "Kvalita předpovědi",
-      "description": "Kombinované skóre 0–100 podle chyby teploty a větru vůči Open-Meteo",
+      "title": "Forecast Quality",
+      "description": "Combined score 0–100 based on temperature and wind error vs. Open-Meteo",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 5, "w": 6, "x": 6, "y": 70 },
       "options": {
@@ -1303,7 +1303,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_forecast_quality_score AS \"Skóre\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_forecast_quality_score AS \"Score\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -1314,8 +1314,8 @@
     {
       "type": "stat",
       "id": 35,
-      "title": "Zdraví senzorů",
-      "description": "Skóre 0–100 podle aktivních senzorových anomálií",
+      "title": "Sensor Health",
+      "description": "Score 0–100 based on active sensor anomalies",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 5, "w": 6, "x": 12, "y": 70 },
       "options": {
@@ -1348,7 +1348,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_sensor_health_score AS \"Skóre\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_sensor_health_score AS \"Score\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -1359,8 +1359,8 @@
     {
       "type": "stat",
       "id": 36,
-      "title": "Anomálie senzorů",
-      "description": "Počet aktivních senzorových anomálií v posledním zápisu",
+      "title": "Sensor Anomalies",
+      "description": "Number of active sensor anomalies in the last write",
       "datasource": { "type": "influxdb", "uid": "${datasource}" },
       "gridPos": { "h": 5, "w": 6, "x": 18, "y": 70 },
       "options": {
@@ -1392,7 +1392,7 @@
       "targets": [
         {
           "datasource": { "type": "influxdb", "uid": "${datasource}" },
-          "rawSql": "SELECT time, meteo_sensor_anomaly_count AS \"Anomálie\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
+          "rawSql": "SELECT time, meteo_sensor_anomaly_count AS \"Anomalies\"\nFROM meteo\nWHERE $__timeFilter(time) AND source = 'station'\nORDER BY time",
           "rawQuery": true,
           "resultFormat": "time_series",
           "refId": "A"
@@ -1404,7 +1404,7 @@
 
   "refresh": "1m",
   "schemaVersion": 38,
-  "tags": ["meteo", "počasí"],
+  "tags": ["meteo", "weather"],
   "templating": {
     "list": [
       {
@@ -1415,7 +1415,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Zdroj dat (InfluxDB)",
+        "label": "Data Source (InfluxDB)",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -1433,7 +1433,7 @@
     "hidden": false
   },
   "timezone": "browser",
-  "title": "Meteostanice",
+  "title": "Weather Station",
   "uid": "meteo-home",
   "version": 1
 }
